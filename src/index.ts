@@ -29,5 +29,7 @@ connection
     .catch((err) => {
         console.log('Err', err);
     });
+const PORT = process.env.PORT;
+console.log(PORT);
 
-app.listen(5000);
+app.listen(PORT);

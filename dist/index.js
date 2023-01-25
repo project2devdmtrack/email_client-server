@@ -26,4 +26,6 @@ config_1.default
     .catch((err) => {
     console.log('Err', err);
 });
-app.listen(5000);
+const PORT = process.env.PORT;
+console.log(PORT);
+app.listen(PORT);
