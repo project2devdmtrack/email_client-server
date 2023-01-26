@@ -1,12 +1,13 @@
-import { Table, Model, Column, DataType } from 'sequelize-typescript';
+import * as sequelize from 'sequelize-typescript';
+import { Message } from './messages';
 
-@Table({
+@sequelize.Table({
     timestamps: false,
-    tableName: 'students',
+    tableName: 'users',
 })
-export class User extends Model {
-    @Column({
-        type: DataType.INTEGER,
+export class User extends sequelize.Model {
+    @sequelize.Column({
+        type: sequelize.DataType.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
@@ -14,38 +15,9 @@ export class User extends Model {
     })
     id!: number;
 
-    @Column({
-        type: DataType.STRING,
+    @sequelize.Column({
+        type: sequelize.DataType.STRING,
         allowNull: false,
     })
     nickname!: string;
-
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-        unique: true,
-    })
-    email!: string;
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    password!: string;
-
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    registered!: string;
-
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    login!: string;
-    @Column({
-        type: DataType.BOOLEAN,
-        allowNull: false,
-    })
-    blocked!: boolean;
 }

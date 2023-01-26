@@ -29,9 +29,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Message = void 0;
 const sequelize = __importStar(require("sequelize-typescript"));
-let User = class User extends sequelize.Model {
+const users_1 = require("./users");
+let Message = class Message extends sequelize.Model {
 };
 __decorate([
     sequelize.Column({
@@ -39,19 +40,37 @@ __decorate([
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        unique: true,
     })
-], User.prototype, "id", void 0);
+], Message.prototype, "id", void 0);
+__decorate([
+    sequelize.Column({
+        type: sequelize.DataType.STRING,
+        allowNull: false,
+    }),
+    sequelize.ForeignKey(() => users_1.User)
+], Message.prototype, "nickname", void 0);
 __decorate([
     sequelize.Column({
         type: sequelize.DataType.STRING,
         allowNull: false,
     })
-], User.prototype, "nickname", void 0);
-User = __decorate([
+], Message.prototype, "timestamp", void 0);
+__decorate([
+    sequelize.Column({
+        type: sequelize.DataType.STRING,
+        allowNull: false,
+    })
+], Message.prototype, "title", void 0);
+__decorate([
+    sequelize.Column({
+        type: sequelize.DataType.STRING,
+        allowNull: false,
+    })
+], Message.prototype, "text", void 0);
+Message = __decorate([
     sequelize.Table({
         timestamps: false,
-        tableName: 'users',
+        tableName: 'messages',
     })
-], User);
-exports.User = User;
+], Message);
+exports.Message = Message;

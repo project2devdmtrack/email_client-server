@@ -18,6 +18,7 @@ app.use('/api', user_routes_1.default);
 app.use((err, req, res, next) => {
     res.status(500).json({ message: err.message });
 });
+const port = process.env.PORT;
 config_1.default
     .sync()
     .then(() => {
@@ -26,6 +27,4 @@ config_1.default
     .catch((err) => {
     console.log('Err', err);
 });
-const PORT = process.env.PORT;
-console.log(PORT);
-app.listen(PORT);
+app.listen(port, () => console.log(`server is started on port: ${port}`));

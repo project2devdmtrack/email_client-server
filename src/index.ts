@@ -6,6 +6,7 @@ import router from './routes/user.routes';
 import { urlencoded, json } from 'body-parser';
 const cors = require('cors');
 const app = express();
+
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
@@ -20,7 +21,7 @@ app.use(
         res.status(500).json({ message: err.message });
     }
 );
-
+const port = process.env.PORT;
 connection
     .sync()
     .then(() => {
@@ -29,7 +30,5 @@ connection
     .catch((err) => {
         console.log('Err', err);
     });
-const PORT = process.env.PORT;
-console.log(PORT);
 
-app.listen(PORT);
+app.listen(port, () => console.log(`server is started on port: ${port}`));

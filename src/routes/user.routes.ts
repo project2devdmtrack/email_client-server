@@ -1,24 +1,18 @@
 import { Router } from 'express';
+import { getAllUsers, signIn } from '../controllers/userController';
 import {
-    createUser,
-    getUserStatus,
-    getAllUsers,
-    deleteUser,
-    signUp,
-    signIn,
-    toggleBlock,
-    toggleUnblock,
-} from '../controllers/userController';
+    createMessage,
+    getAllMessages,
+} from '../controllers/messageController';
+
 const router = Router();
 
-router.post('/createuser', createUser);
-router.get('/getusers', getAllUsers);
-router.get('/getuserstatus', getUserStatus);
-router.delete('/deleteuser', deleteUser);
-
-router.post('/signup', signUp);
 router.post('/signin', signIn);
-router.put('/block', toggleBlock);
-router.put('/unblock', toggleUnblock);
+
+router.post('/createmessage', createMessage);
+router.get('/getmessages', getAllMessages);
+
+// router.post('/createuser', createUser);
+// router.get('/getusers', getAllUsers);
 
 export default router;
