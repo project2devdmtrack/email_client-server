@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllMessages = exports.createMessage = void 0;
+exports.getMessagesForUser = exports.createMessage = void 0;
 const messages_1 = require("../models/messages");
+const { Op } = require('sequelize');
 const createMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log(req.body);
@@ -24,20 +25,33 @@ const createMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.createMessage = createMessage;
-const getAllMessages = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getMessagesForUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('request body:', req.body);
-        const messages = yield messages_1.Message.findAll();
-        console.log('messages:', messages);
-        return res
-            .status(200)
-            .json({ message: `messages fetched successfully`, data: messages });
+        const { author, recepient } = req.body;
+        console.log(author, recepient);
+        const messages = yield messages_1.Message.findAll({
+            where: {
+                [Op.or]: [
+                    { recepient: recepient, author: author },
+                    { recepient: author, author: recepient },
+                ],
+            },
+            order: [['timestamp', 'DESC']],
+        });
+        // const messagesSent: IMessage[] = await Message.findAll({
+        //     where: { recepient: author, author: recepient },
+        //     order: [['timestamp', 'DESC']],
+        // });
+        return res.status(200).json({
+            message: `messages fetched successfully`,
+            data: messages,
+        });
     }
     catch (err) {
         return err.message;
     }
 });
-exports.getAllMessages = getAllMessages;
+exports.getMessagesForUser = getMessagesForUser;
 // export const signUp: RequestHandler = async (req, res, next) => {
 //     try {
 //         const { email, password } = req.body;

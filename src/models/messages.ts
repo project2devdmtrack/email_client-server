@@ -19,13 +19,21 @@ export class Message extends sequelize.Model {
         allowNull: false,
     })
     @sequelize.ForeignKey(() => User)
-    nickname!: string;
+    author!: string;
 
     @sequelize.Column({
         type: sequelize.DataType.STRING,
         allowNull: false,
     })
-    timestamp!: string;
+    @sequelize.ForeignKey(() => User)
+    recepient!: string;
+
+    @sequelize.Column({
+        type: sequelize.DataType.INTEGER,
+        allowNull: false,
+    })
+    timestamp!: number;
+
     @sequelize.Column({
         type: sequelize.DataType.STRING,
         allowNull: false,

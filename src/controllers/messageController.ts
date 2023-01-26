@@ -1,5 +1,8 @@
 import { RequestHandler } from 'express';
+import { or } from 'sequelize';
+import { IMessage } from '../interfaces/messages';
 import { Message } from '../models/messages';
+const { Op } = require('sequelize');
 
 export const createMessage: RequestHandler = async (req, res, next) => {
     try {
@@ -14,16 +17,25 @@ export const createMessage: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const getAllMessages: RequestHandler = async (req, res, next) => {
+export const getMessagesForUser: RequestHandler = async (req, res, next) => {
     try {
-        console.log('request body:', req.body);
+        const { author, recepient } = req.body;
+        console.log(author, recepient);
 
-        const messages: Message[] = await Message.findAll();
-        console.log('messages:', messages);
+        const messages: IMessage[] = await Message.findAll({
+            where: {
+                [Op.or]: [
+                    { recepient: recepient, author: author },
+                    { recepient: author, author: recepient },
+                ],
+            },
+            order: [['timestamp', 'DESC']],
+        });
 
-        return res
-            .status(200)
-            .json({ message: `messages fetched successfully`, data: messages });
+        return res.status(200).json({
+            message: `messages fetched successfully`,
+            data: messages,
+        });
     } catch (err: any) {
         return err.message;
     }

@@ -6,7 +6,7 @@ const messageController_1 = require("../controllers/messageController");
 const router = (0, express_1.Router)();
 router.post('/signin', userController_1.signIn);
 router.post('/createmessage', messageController_1.createMessage);
-router.get('/getmessages', messageController_1.getAllMessages);
+router.get('/getmessagesforuser', messageController_1.getMessagesForUser);
 // router.post('/createuser', createUser);
 // router.get('/getusers', getAllUsers);
 exports.default = router;

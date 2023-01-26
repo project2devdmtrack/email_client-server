@@ -48,10 +48,17 @@ __decorate([
         allowNull: false,
     }),
     sequelize.ForeignKey(() => users_1.User)
-], Message.prototype, "nickname", void 0);
+], Message.prototype, "author", void 0);
 __decorate([
     sequelize.Column({
         type: sequelize.DataType.STRING,
+        allowNull: false,
+    }),
+    sequelize.ForeignKey(() => users_1.User)
+], Message.prototype, "recepient", void 0);
+__decorate([
+    sequelize.Column({
+        type: sequelize.DataType.INTEGER,
         allowNull: false,
     })
 ], Message.prototype, "timestamp", void 0);
