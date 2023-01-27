@@ -19,5 +19,5 @@ export class User extends sequelize.Model {
         type: sequelize.DataType.STRING,
         allowNull: false,
     })
-    nickname!: string;
+    username!: string;
 }

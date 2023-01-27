@@ -6,3 +6,9 @@ export interface IMessage {
     title: string;
     text: string;
 }
+
+export interface IGetMessagesProps {
+    username: string;
+    event: string;
+    timestamp: number;
+}

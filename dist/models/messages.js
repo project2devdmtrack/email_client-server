@@ -74,6 +74,11 @@ __decorate([
         allowNull: false,
     })
 ], Message.prototype, "text", void 0);
+__decorate([
+    sequelize.Column({
+        type: sequelize.DataType.STRING,
+    })
+], Message.prototype, "event", void 0);
 Message = __decorate([
     sequelize.Table({
         timestamps: false,

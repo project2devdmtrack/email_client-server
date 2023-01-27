@@ -47,7 +47,7 @@ __decorate([
         type: sequelize.DataType.STRING,
         allowNull: false,
     })
-], User.prototype, "nickname", void 0);
+], User.prototype, "username", void 0);
 User = __decorate([
     sequelize.Table({
         timestamps: false,

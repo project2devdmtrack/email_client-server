@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = require("../models/users");
 const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nickname } = req.body;
+        const { username } = req.body;
         let user = yield users_1.User.create(Object.assign({}, req.body));
         if (user) {
             return res.status(200).json({
-                message: `user with nickname:${nickname} has entered`,
+                message: `user with nickname:${username} has entered`,
                 data: user,
             });
         }

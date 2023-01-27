@@ -53,15 +53,24 @@ const getSocketMessages = (message) => {
 const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username } = req.body;
-        let user = yield users_1.User.create(Object.assign({}, req.body));
+        const user = yield users_1.User.findOne({
+            where: { username: username.toLowerCase() },
+        });
         if (user) {
             return res.status(200).json({
                 message: `user with nickname:${username} has entered`,
                 data: user,
             });
         }
-        else
-            throw Error;
+        else {
+            let newuser = yield users_1.User.create({
+                username: username.toLowerCase(),
+            });
+            return res.status(200).json({
+                message: `user with nickname:${username} was created`,
+                data: newuser,
+            });
+        }
     }
     catch (err) {
         return res.status(404).json({
@@ -83,18 +92,13 @@ const createMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 });
 const getMessagesForUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { author, recepient } = req.body;
-        // console.log(req.body, 'hello from getmessages');
+        const username = req.query.username;
         const messages = yield messages_1.Message.findAll({
             where: {
-                [Op.or]: [
-                    { recepient: recepient, author: author },
-                    { recepient: author, author: recepient },
-                ],
+                [Op.or]: [{ recepient: username }, { author: username }],
             },
             order: [['timestamp', 'DESC']],
         });
-        // console.log(messages);
         return res.status(200).json({
             message: `messages fetched successfully`,
             data: messages,

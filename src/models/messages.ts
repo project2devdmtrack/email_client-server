@@ -45,4 +45,9 @@ export class Message extends sequelize.Model {
         allowNull: false,
     })
     text!: string;
+
+    @sequelize.Column({
+        type: sequelize.DataType.STRING,
+    })
+    event!: string;
 }

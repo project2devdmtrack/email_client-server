@@ -2,11 +2,14 @@
     "name": "webchat-2",
     "version": "1.0.0",
     "description": "",
-    "main": "./dist/app.js",
+    "main": "./dist/app-new.js",
+    "engines": {
+        "node": "16.17.0"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "tsc && nodemon ./dist/app.js",
-        "dev": "nodemon ./src/app.ts",
+        "start": "tsc && nodemon ./dist/app-new.js",
+        "dev": "nodemon ./src/app-new.ts",
         "build": "tsc"
     },
     "author": "dmtrack",
