@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserStatus = exports.getAllUsers = exports.signIn = void 0;
 const users_1 = require("../models/users");
 const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,29 +30,6 @@ const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
-exports.signIn = signIn;
-const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const allUsers = yield users_1.User.findAll();
-        return res
-            .status(200)
-            .json({ message: `users fetched successfully`, data: allUsers });
-    }
-    catch (err) {
-        return err.message;
-    }
-});
-exports.getAllUsers = getAllUsers;
-const getUserStatus = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.params;
-        const user = yield users_1.User.findByPk(id);
-        return res
-            .status(200)
-            .json({ message: `user with id: ${id} was fetched`, data: user });
-    }
-    catch (err) {
-        return err.message;
-    }
-});
-exports.getUserStatus = getUserStatus;
+module.exports = {
+    signIn,
+};

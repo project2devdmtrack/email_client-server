@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { User } from '../models/users';
 
-export const signIn: RequestHandler = async (req, res, next) => {
+const signIn: RequestHandler = async (req, res, next) => {
     try {
         const { nickname } = req.body;
         let user = await User.create({ ...req.body });
@@ -19,25 +19,6 @@ export const signIn: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const getAllUsers: RequestHandler = async (req, res, next) => {
-    try {
-        const allUsers: User[] = await User.findAll();
-        return res
-            .status(200)
-            .json({ message: `users fetched successfully`, data: allUsers });
-    } catch (err: any) {
-        return err.message;
-    }
-};
-
-export const getUserStatus: RequestHandler = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user: User | null = await User.findByPk(id);
-        return res
-            .status(200)
-            .json({ message: `user with id: ${id} was fetched`, data: user });
-    } catch (err: any) {
-        return err.message;
-    }
+module.exports = {
+    signIn,
 };
