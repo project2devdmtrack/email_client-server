@@ -1,20 +1,12 @@
 import connection from './db/config';
-const db = require('./controllers/messageController');
+import { IEnterUserPropsSockets } from './interfaces/messages';
 const express = require('express');
+const app = express();
+const db = require('./controllers/query');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const app = express();
 const port = process.env.PORT || 5000;
 const socketPort = 8000;
-const { emit } = require('process');
-const server = require('http').createServer(app);
-
-const io = require('socket.io')(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
-    },
-});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,30 +15,38 @@ app.use(
         extended: true,
     })
 );
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
 
-const emitMostRecentMessges = () => {
-    db.getSocketMessages()
-        .then((result: any) => io.emit('chat message', result))
-        .catch(console.log);
-};
-// connects, creates message, and emits top 10 messages
 io.on('connection', (socket: any) => {
-    console.log('a user connected');
-    socket.on('chat message', (msg: any) => {
-        db.createSocketMessage(JSON.parse(msg))
-            .then(() => {
-                emitMostRecentMessges();
-            })
-            .catch((err: Error) => io.emit(err));
+    socket.on('USER:JOIN', async (data: IEnterUserPropsSockets) => {
+        const messages = await db.getSocketMessages(data.value);
+        await socket.emit('MESSAGES:RECEIVED', messages);
     });
 
-    // close event when user disconnects from app
+    console.log('a user connected');
+
+    socket.on('MESSAGE:CREATED', async (msg: any) => {
+        const message = await db.createSocketMessage(msg);
+        await socket.broadcast.emit('MESSAGE:DELIVERED', message);
+        console.log('test');
+    });
+
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
 });
 
-// Displays in terminal which port the socketPort is running on
+// const emitMostRecentMessges = (username: string) => {
+//     db.getSocketMessages(username)
+//         .then((result: any) => io.emit('MESSAGE:DELIVERED', result))
+//         .catch(console.log);
+// };
 
 connection
     .sync()
@@ -63,5 +63,6 @@ server.listen(socketPort, () => {
     console.log(`listening on *:${socketPort}`);
 });
 
-// app.get('/messages', db.getMessagesForUser);
-// app.post('/messages', db.createMessage);
+app.post('/signin', db.signIn);
+app.get('/getmessages', db.getMessagesForUser);
+app.get('/getusers', db.getusers);

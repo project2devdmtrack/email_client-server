@@ -9,6 +9,10 @@ export interface IMessage {
 
 export interface IGetMessagesProps {
     username: string;
-    event: string;
-    timestamp: number;
+    event?: string;
+    timestamp?: number;
+}
+
+export interface IEnterUserPropsSockets {
+    value: string;
 }

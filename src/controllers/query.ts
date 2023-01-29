@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { User } from '../models/users';
-import { IGetMessagesProps, IMessage } from '../interfaces/messages';
+import { IMessage } from '../interfaces/messages';
 import { Message } from '../models/messages';
 const { Op } = require('sequelize');
 
@@ -8,11 +8,7 @@ const createSocketMessage = (msg: any) => {
     return new Promise((resolve) => {
         try {
             let message = Message.create({
-                author: msg.author,
-                recepient: 'ivan',
-                title: 'chat',
-                text: msg.text,
-                timestamp: 5,
+                ...msg,
             });
             resolve(message);
         } catch (err: any) {
@@ -21,17 +17,14 @@ const createSocketMessage = (msg: any) => {
     });
 };
 
-const getSocketMessages = (message: IGetMessagesProps) => {
-    console.log('message inside methods:', message);
+const getSocketMessages = (username: string) => {
+    console.log('messages are received for:', username);
 
     return new Promise((resolve) => {
         try {
             const messages = Message.findAll({
                 where: {
-                    [Op.or]: [
-                        { author: message.username },
-                        { recepient: message.username },
-                    ],
+                    [Op.or]: [{ author: username }, { recepient: username }],
                 },
                 order: [['timestamp', 'DESC']],
                 limit: 100,
@@ -101,10 +94,22 @@ const getMessagesForUser: RequestHandler = async (req, res, next) => {
     }
 };
 
+export const getusers: RequestHandler = async (req, res, next) => {
+    try {
+        const users: User[] = await User.findAll();
+        return res
+            .status(200)
+            .json({ message: `users fetched successfully`, data: users });
+    } catch (err: any) {
+        return err.message;
+    }
+};
+
 module.exports = {
     createMessage,
     getMessagesForUser,
     getSocketMessages,
     createSocketMessage,
     signIn,
+    getusers,
 };

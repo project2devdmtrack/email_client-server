@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,44 +17,67 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-const wss = new ws.Server({
-    port: socketPort || 8000,
-}, () => console.log(`Server started on ${socketPort}`));
-wss.on('connection', (ws) => {
-    ws.on('message', (message) => {
-        message = JSON.parse(message);
-        console.log(message);
-        switch (message.event) {
-            case 'message':
-                broadcastMessage(message);
-                db.createSocketMessage(message);
-                break;
-            case 'connection':
-                const result = (function () {
-                    return __awaiter(this, void 0, void 0, function* () {
-                        const messages = yield db
-                            .getSocketMessages(message)
-                            .then((data) => data);
-                        console.log(messages);
-                        broadcastMessage(messages);
-                    });
-                })();
-                break;
-        }
-    });
-    ws.on('open', (message) => {
-        console.log(`[client connected]`);
-        ws.send(`Hi! this is client`);
-    });
-    ws.on('disconnect', () => {
-        console.log('user is disconnected');
-    });
-});
-function broadcastMessage(message) {
-    wss.clients.forEach((client) => {
-        client.send(JSON.stringify(message));
-    });
-}
+// const wss = new ws.Server(
+//     {
+//         port: socketPort || 8000,
+//     },
+//     () => console.log(`WSS started on ${socketPort}`)
+// );
+// wss.on('connection', function connection(ws: any) {
+//     ws.send('user is connected to server');
+//     ws.on('open', function (message: any) {
+//         message = JSON.parse(message);
+//         console.log(message);
+//     });
+// const messages = db.getSocketMessages(message.username);
+// ws.send(JSON.stringify(messages));
+// });
+// ws.on('message', function (message: any) {
+//     message = JSON.parse(message);
+//     switch (message.event) {
+//         case 'message':
+//             broadcastMessage(message);
+//             break;
+//         case 'connection':
+//             // broadcastMessage(message);
+//             break;
+//     }
+// });
+// });
+// wss.on('connection', (ws: any) => {
+//     ws.on('open', (message: any) => {
+//         ws.send(`[client connected]`);
+// const messages = await db.getSocketMessages(message.username);
+// ws.send(JSON.stringify(messages));
+// });
+// ws.on('message', async (message: any) => {
+//     message = await JSON.parse(message);
+//     // console.log(message);
+//     switch (message.event) {
+//         case 'message':
+//             console.log(message, 'message event');
+//             db.createSocketMessage(message);
+//             const newmessages = await db.getSocketMessages(
+//                 message.username
+//             );
+//             await broadcastMessage(newmessages);
+//             break;
+//         case 'connection':
+//             console.log('connection');
+//             const messages = await db.getSocketMessages(message.username);
+//             await ws.send(JSON.stringify(messages));
+//             break;
+//     }
+// });
+//     ws.on('disconnect', () => {
+//         console.log('user is disconnected');
+//     });
+// });
+// function broadcastMessage(message: any) {
+//     wss.clients.forEach((client: WebSocket) => {
+//         client.send(JSON.stringify(message));
+//     });
+// }
 config_1.default
     .sync()
     .then(() => {
@@ -77,3 +91,4 @@ app.listen(port, () => {
 });
 app.post('/signin', db.signIn);
 app.get('/getmessages', db.getMessagesForUser);
+app.get('/getusers', db.getusers);

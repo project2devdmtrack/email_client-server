@@ -9,19 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getusers = void 0;
 const users_1 = require("../models/users");
 const messages_1 = require("../models/messages");
 const { Op } = require('sequelize');
 const createSocketMessage = (msg) => {
     return new Promise((resolve) => {
         try {
-            let message = messages_1.Message.create({
-                author: msg.author,
-                recepient: 'ivan',
-                title: 'chat',
-                text: msg.text,
-                timestamp: 5,
-            });
+            let message = messages_1.Message.create(Object.assign({}, msg));
             resolve(message);
         }
         catch (err) {
@@ -29,16 +24,13 @@ const createSocketMessage = (msg) => {
         }
     });
 };
-const getSocketMessages = (message) => {
-    console.log('message inside methods:', message);
+const getSocketMessages = (username) => {
+    console.log('messages are received for:', username);
     return new Promise((resolve) => {
         try {
             const messages = messages_1.Message.findAll({
                 where: {
-                    [Op.or]: [
-                        { author: message.username },
-                        { recepient: message.username },
-                    ],
+                    [Op.or]: [{ author: username }, { recepient: username }],
                 },
                 order: [['timestamp', 'DESC']],
                 limit: 100,
@@ -108,10 +100,23 @@ const getMessagesForUser = (req, res, next) => __awaiter(void 0, void 0, void 0,
         return err.message;
     }
 });
+const getusers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield users_1.User.findAll();
+        return res
+            .status(200)
+            .json({ message: `users fetched successfully`, data: users });
+    }
+    catch (err) {
+        return err.message;
+    }
+});
+exports.getusers = getusers;
 module.exports = {
     createMessage,
     getMessagesForUser,
     getSocketMessages,
     createSocketMessage,
     signIn,
+    getusers: exports.getusers,
 };
