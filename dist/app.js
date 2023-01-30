@@ -29,7 +29,6 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: '*',
-        methods: ['GET', 'POST'],
     },
 });
 io.on('connection', (socket) => {
@@ -41,7 +40,6 @@ io.on('connection', (socket) => {
     socket.on('MESSAGE:CREATED', (msg) => __awaiter(void 0, void 0, void 0, function* () {
         const message = yield db.createSocketMessage(msg);
         yield socket.broadcast.emit('MESSAGE:DELIVERED', message);
-        console.log('test');
     }));
     socket.on('disconnect', () => {
         console.log('user disconnected');
