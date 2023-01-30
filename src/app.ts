@@ -6,7 +6,7 @@ const db = require('./controllers/query');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const port = process.env.PORT;
-const socketPort = process.env.SOCKETPORT;
+import * as http from 'http';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -15,7 +15,7 @@ app.use(
         extended: true,
     })
 );
-const server = require('http').createServer(app);
+const server = http.createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: '*',
@@ -54,11 +54,9 @@ connection
     .catch((err) => {
         console.log('Err', err);
     });
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`);
-});
-server.listen(socketPort, () => {
-    console.log(`listening on *:${socketPort}`);
+
+server.listen(port, () => {
+    console.log(`listening on *:${port}`);
 });
 
 app.post('/signin', db.signIn);
