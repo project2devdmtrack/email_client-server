@@ -5,8 +5,8 @@ const app = express();
 const db = require('./controllers/query');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const port = process.env.PORT || 5000;
-const socketPort = 8000;
+const port = process.env.PORT;
+const socketPort = process.env.SOCKETPORT;
 
 app.use(cors());
 app.use(bodyParser.json());
