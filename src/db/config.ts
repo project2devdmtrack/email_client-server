@@ -12,10 +12,10 @@ const connection = new Sequelize({
     database: process.env.DB_NAME,
     logging: false,
     models: [User, Message],
-    // dialectOptions: {
-    //     ssl: true,
-    //     native: true,
-    // },
+    dialectOptions: {
+        ssl: true,
+        native: true,
+    },
 });
 
 export default connection;
