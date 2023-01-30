@@ -2,7 +2,6 @@ import express from 'express';
 import connection from './db/config';
 import dotenv from 'dotenv';
 dotenv.config();
-import router from './routes/user.routes';
 import { urlencoded, json } from 'body-parser';
 const cors = require('cors');
 const app = express();
@@ -10,7 +9,6 @@ const app = express();
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use('/api', router);
 app.use(
     (
         err: Error,
